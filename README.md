@@ -1,6 +1,6 @@
 # ⚙️ Install
 
-[![Platform](https://img.shields.io/badge/platform-Windows-blue.svg)](https://github.com/YourUsername/Install)
+[![Platform](https://img.shields.io/badge/platform-Windows-blue.svg)](https://github.com/FatCat112/Install)
 [![Shell](https://img.shields.io/badge/shell-PowerShell-5391FE.svg)](https://learn.microsoft.com/en-us/powershell/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -14,7 +14,7 @@ A streamlined, logged, and user-friendly post-install script for Windows using P
 - Uses `winget` to silently install multiple packages  
 - Logs all steps and results to your Desktop (`InstallLog.txt`)  
 - Checks for admin privileges and winget availability  
-- Optionally reboots system with user cancel option  
+- Optionally reboots the system with a cancel prompt  
 
 ---
 
@@ -29,11 +29,11 @@ A streamlined, logged, and user-friendly post-install script for Windows using P
 
 ✅ Logs:
 - All actions timestamped  
-- Appends to `InstallLog.txt` on user's Desktop  
+- Output saved to `InstallLog.txt` on user's Desktop  
 
 ✅ Reboot Prompt:
 - Waits 60 seconds  
-- ESC cancels shutdown  
+- ESC key cancels shutdown  
 
 ---
 
@@ -41,8 +41,8 @@ A streamlined, logged, and user-friendly post-install script for Windows using P
 
 > 💡 Run in an elevated PowerShell session (right-click → “Run as Administrator”).
 
-### 📂 Option 1: Clone and run
+### 📂 Option 1: Clone and run manually
 ```powershell
-git clone https://github.com/YourUsername/Install
+git clone https://github.com/FatCat112/Install
 cd Install
 .\windows-install.ps1
