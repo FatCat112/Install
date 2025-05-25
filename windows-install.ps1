@@ -12,7 +12,7 @@ $DesktopPath = [Environment]::GetFolderPath("Desktop")
 $LogFile = Join-Path $DesktopPath "InstallLog.txt"
 
 # Function to log actions
-function Log-Action {
+function Write-Log {
     param ([string]$Message)
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $entry = "$timestamp - $Message"
@@ -20,7 +20,7 @@ function Log-Action {
     Add-Content -Path $LogFile -Value $entry
 }
 
-Log-Action "===== Script started ====="
+Write-Log "===== Script started ====="
 
 
 
@@ -32,8 +32,8 @@ Log-Action "===== Script started ====="
 # ========== Admin Check ==========
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Log-Action "ERROR: Script must be run as Administrator."
-    exit
+    Write-Log "ERROR: Script must be run as Administrator."
+    Exit 1
 }
 
 
@@ -46,8 +46,8 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # ========== Winget Check ==========
 
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-    Log-Action "ERROR: winget is not installed on this system."
-    exit
+    Write-Log "ERROR: winget is not installed on this system."
+    exit 1
 }
 
 
@@ -59,7 +59,7 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 
 # ========== Winget Update ==========
 
-Log-Action "Upgrading existing packages via winget..."
+Write-Log "Upgrading existing packages via winget..."
 winget upgrade --all --silent
 
 
@@ -103,7 +103,7 @@ $apps = @(
     # == .NET Runtimes ==
     "Microsoft.DotNet.Runtime.8",        # .NET Runtime 8
     "Microsoft.DotNet.DesktopRuntime.9", # .NET Desktop Runtime 9
-    "Microsoft.DotNet.Framework.DeveloperPack_4" # .NET Framework 4.8
+    "Microsoft.DotNet.Framework.DeveloperPack_4.8"  # .NET Framework 4.8
 
 )
 
@@ -117,12 +117,12 @@ $apps = @(
 # ========== Install Loop ==========
 
 foreach ($app in $apps) {
-    Log-Action "Attempting to install $app..."
+    Write-Log "Attempting to install $app..."
     try {
-        winget install --id=$app --silent --accept-package-agreements --accept-source-agreements
-        Log-Action "Successfully installed $app."
+        winget install --id="$app" --silent --accept-package-agreements --accept-source-agreements
+        Write-Log "Successfully installed $app."
     } catch {
-        Log-Action "FAILED to install $app: $_"
+        Write-Log "FAILED to install $app: $_"
     }
 }
 
@@ -135,7 +135,7 @@ foreach ($app in $apps) {
 
 # ========== Wrap Up ==========
 
-Log-Action "===== Script completed ====="
+Write-Log "===== Script completed ====="
 Write-Host "Script execution completed. Log file created at $LogFile"
 
 
@@ -152,20 +152,17 @@ Write-Host "System will reboot in 1 minute. Press ESC to cancel reboot."
 $reboot = $true
 
 for ($i = 60; $i -gt 0; $i--) {
-    Write-Host -NoNewline "`rRebooting in $i seconds... Press ESC to cancel. "
+    Write-Host -NoNewline "`rRebooting in $i seconds... Press CTRL+C to cancel. "
     Start-Sleep -Seconds 1
-
-    if ([console]::KeyAvailable) {
-        $key = [console]::ReadKey($true)
-        if ($key.Key -eq 'Escape') {
-            Write-Host "`nReboot cancelled by user."
-            $reboot = $false
-            break
-        }
-    }
 }
 
 if ($reboot) {
-    Log-Action "Rebooting system..."
+    Write-Log "Rebooting system..."
     Restart-Computer
+}
+if ($reboot) {
+    Write-Log "Rebooting system..."
+    Restart-Computer
+} else {
+    Write-Log "Reboot cancelled by user (use CTRL+C to cancel during countdown)."
 }
