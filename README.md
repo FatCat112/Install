@@ -1,6 +1,6 @@
 # ⚙️ Install
 
-[![Platform](https://img.shields.io/badge/platform-Windows-blue.svg)](https://github.com/FatCat112/Install)
+[![Platform](https://img.shields.io/badge/platform-Windows-blue.svg)](https://github.com/PhatCat/Install)
 [![Shell](https://img.shields.io/badge/shell-PowerShell-5391FE.svg)](https://learn.microsoft.com/en-us/powershell/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -43,6 +43,6 @@ A streamlined, logged, and user-friendly post-install script for Windows using P
 
 ### 📂 Option 1: Clone and run manually
 ```powershell
-git clone https://github.com/FatCat112/Install
+git clone https://github.com/PhatCat/Install
 cd Install
 .\windows-install.ps1
